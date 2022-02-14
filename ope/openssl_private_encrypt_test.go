@@ -41,6 +41,8 @@ MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 `)
 
 func TestOpensslPrivateEncrypt(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name       string
 		data       string
@@ -76,6 +78,8 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 	for _, tt := range cases {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			encryptedData, ok := ope.OpensslPrivateEncrypt(tt.data, tt.privateKey)
 			if tt.shouldFail {
 				assert.Equal(t, false, ok)
