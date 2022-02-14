@@ -1,14 +1,17 @@
-package openssl_private_encrypt_test
+package ope_test
 
 import (
-	ope "github.com/Ali-A-A/openssl-private-encrypt"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/Ali-A-A/openssl-private-encrypt/ope"
 )
 
 func testingKey(s string) string { return strings.ReplaceAll(s, "TESTING KEY", "PRIVATE KEY") }
 
+//nolint:gochecknoglobals
 var pemPrivateKey = testingKey(`-----BEGIN RSA TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 fd7Ai2KW5ToIwzFofvJcS/STa6HA5gQenRUCAwEAAQJBAIq9amn00aS0h/CrjXqu
@@ -20,6 +23,7 @@ tAboUGBxTDq3ZroNism3DaMIbKPyYrAqhKov1h5V
 -----END RSA TESTING KEY-----
 `)
 
+//nolint:gochecknoglobals
 var invalidTypeKey = testingKey(`-----BEGIN TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 fd7Ai2KW5ToIwzFofvJcS/STa6HA5gQenRUCAwEAAQJBAIq9amn00aS0h/CrjXqu
@@ -31,6 +35,7 @@ tAboUGBxTDq3ZroNism3DaMIbKPyYrAqhKov1h5V
 -----END TESTING KEY-----
 `)
 
+//nolint:gochecknoglobals
 var invalidBlockKey = testingKey(`-----BEGIN RSA TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 -----END RSA TESTING KEY-----

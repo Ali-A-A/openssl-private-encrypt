@@ -1,4 +1,4 @@
-package openssl_private_encrypt
+package ope
 
 import (
 	"crypto"
@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	// RSAPrivateType is type that taken from the preamble
+	// RSAPrivateType is type that taken from the preamble.
 	RSAPrivateType = "RSA PRIVATE KEY"
 )
 
