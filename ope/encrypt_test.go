@@ -76,21 +76,20 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 		},
 	}
 
-	for _, tt := range cases {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+	for _, testcase := range cases {
+		t.Run(testcase.name, func(t *testing.T) {
 			t.Parallel()
 
-			encryptedData, err := ope.OpensslPrivateEncrypt(tt.data, tt.privateKey)
-			if tt.shouldFail {
+			encryptedData, err := ope.OpensslPrivateEncrypt(testcase.data, testcase.privateKey)
+			if testcase.shouldFail {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, 0, len(encryptedData))
 
-				data, err := opd.OpensslPrivateDecrypt(encryptedData, tt.privateKey)
+				data, err := opd.OpensslPrivateDecrypt(encryptedData, testcase.privateKey)
 				assert.NoError(t, err)
-				assert.Equal(t, tt.data, data)
+				assert.Equal(t, testcase.data, data)
 			}
 		})
 	}

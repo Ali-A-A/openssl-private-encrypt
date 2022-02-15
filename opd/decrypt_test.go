@@ -81,13 +81,12 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 		},
 	}
 
-	for _, tt := range cases {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+	for _, testcase := range cases {
+		t.Run(testcase.name, func(t *testing.T) {
 			t.Parallel()
 
-			data, err := opd.OpensslPrivateDecrypt(tt.encryptedData, tt.privateKey)
-			if tt.shouldFail {
+			data, err := opd.OpensslPrivateDecrypt(testcase.encryptedData, testcase.privateKey)
+			if testcase.shouldFail {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)

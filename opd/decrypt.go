@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/ali-a-a/openssl-private-encrypt/pkg/utils"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -20,11 +21,11 @@ const (
 func OpensslPrivateDecrypt(encryptedData, privateKey string) (string, error) {
 	block, _ := pem.Decode([]byte(privateKey))
 	if block == nil {
-		return "", fmt.Errorf("block is nil")
+		return "",  errors.New("block is nil")
 	}
 
 	if block.Type != RSAPrivateType {
-		return "", fmt.Errorf("rsa private type is invalid")
+		return "", errors.New("rsa private type is invalid")
 	}
 
 	rsaPrivateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
