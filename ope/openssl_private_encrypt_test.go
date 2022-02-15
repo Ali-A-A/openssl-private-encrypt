@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Ali-A-A/openssl-private-encrypt/ope"
+	"github.com/ali-a-a/openssl-private-encrypt/ope"
 	"github.com/stretchr/testify/assert"
 )
 
