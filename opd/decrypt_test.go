@@ -82,6 +82,8 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 	}
 
 	for _, testcase := range cases {
+		testcase := testcase
+
 		t.Run(testcase.name, func(t *testing.T) {
 			t.Parallel()
 
