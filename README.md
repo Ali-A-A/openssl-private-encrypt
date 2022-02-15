@@ -1,7 +1,7 @@
 # openssl-private
 
 ![GitHub Workflow Status](https://github.com/ali-a-a/openssl-private/workflows/ci/badge.svg)
-[![Codecov](https://img.shields.io/codecov/c/gh/ali-a-a/openssl-private-encrypt?logo=codecov&style=flat-square)](https://codecov.io/gh/ali-a-a/openssl-private)
+[![codecov](https://codecov.io/gh/ali-a-a/openssl-private/branch/main/graph/badge.svg)](https://codecov.io/gh/ali-a-a/openssl-private)
 
 ## Description
 Encrypt/Decrypt data using pem private key.
