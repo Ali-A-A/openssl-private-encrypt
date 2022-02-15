@@ -1,4 +1,4 @@
-module github.com/ali-a-a/openssl-private-encrypt
+module github.com/ali-a-a/openssl-private
 
 go 1.17
 
