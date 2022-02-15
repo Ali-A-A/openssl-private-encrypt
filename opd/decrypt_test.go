@@ -1,9 +1,10 @@
-package ope_test
+package opd_test
 
 import (
 	"strings"
 	"testing"
 
+	"github.com/ali-a-a/openssl-private-encrypt/opd"
 	"github.com/ali-a-a/openssl-private-encrypt/ope"
 	"github.com/stretchr/testify/assert"
 )
@@ -43,49 +44,55 @@ MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 func TestOpensslPrivateEncrypt(t *testing.T) {
 	t.Parallel()
 
+	testData := "ali"
+
+	encryptedData, err := ope.OpensslPrivateEncrypt(testData, pemPrivateKey)
+	assert.NoError(t, err)
+
 	cases := []struct {
-		name       string
-		data       string
-		privateKey string
-		shouldFail bool
+		name          string
+		privateKey    string
+		encryptedData string
+		shouldFail    bool
 	}{
 		{
-			name:       "successful",
-			privateKey: pemPrivateKey,
-			data:       "ali",
-			shouldFail: false,
+			name:          "successful",
+			privateKey:    pemPrivateKey,
+			encryptedData: encryptedData,
+			shouldFail:    false,
 		},
 		{
-			name:       "invalid type",
-			privateKey: invalidTypeKey,
-			data:       "ali",
-			shouldFail: true,
+			name:          "invalid type",
+			privateKey:    invalidTypeKey,
+			encryptedData: encryptedData,
+			shouldFail:    true,
 		},
 		{
-			name:       "invalid block",
-			privateKey: invalidBlockKey,
-			data:       "ali",
-			shouldFail: true,
+			name:          "invalid block",
+			privateKey:    invalidBlockKey,
+			encryptedData: encryptedData,
+			shouldFail:    true,
 		},
 		{
-			name:       "empty data",
-			privateKey: pemPrivateKey,
-			data:       "",
-			shouldFail: false,
+			name:          "invalid encrypted data",
+			privateKey:    pemPrivateKey,
+			encryptedData: "invalid",
+			shouldFail:    true,
 		},
 	}
 
-	for _, tt := range cases {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+	for _, testcase := range cases {
+		testcase := testcase
+
+		t.Run(testcase.name, func(t *testing.T) {
 			t.Parallel()
 
-			encryptedData, ok := ope.OpensslPrivateEncrypt(tt.data, tt.privateKey)
-			if tt.shouldFail {
-				assert.Equal(t, false, ok)
+			data, err := opd.OpensslPrivateDecrypt(testcase.encryptedData, testcase.privateKey)
+			if testcase.shouldFail {
+				assert.Error(t, err)
 			} else {
-				assert.Equal(t, true, ok)
-				assert.NotEqual(t, 0, len(encryptedData))
+				assert.NoError(t, err)
+				assert.Equal(t, testData, data)
 			}
 		})
 	}
