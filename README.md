@@ -1,4 +1,4 @@
-# openssl-private-encrypt
+# openssl-private
 
 ![](https://github.com/Ali-A-A/openssl-private-encrypt/workflows/CI/badge.svg)
 
