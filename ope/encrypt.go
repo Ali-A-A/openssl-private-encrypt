@@ -7,7 +7,7 @@ import (
 	"encoding/pem"
 	"fmt"
 
-	"github.com/ali-a-a/openssl-private-encrypt/pkg/utils"
+	"github.com/ali-a-a/openssl-private/pkg/utils"
 	"github.com/pkg/errors"
 )
 
