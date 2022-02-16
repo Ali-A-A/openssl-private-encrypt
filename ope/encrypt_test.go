@@ -1,14 +1,19 @@
-package openssl_private_encrypt_test
+package ope_test
 
 import (
-	ope "github.com/Ali-A-A/openssl-private-encrypt"
-	"github.com/stretchr/testify/assert"
+	"crypto"
+	"crypto/rsa"
+	"github.com/ali-a-a/openssl-private/pkg/utils"
 	"strings"
 	"testing"
+
+	"github.com/ali-a-a/openssl-private/ope"
+	"github.com/stretchr/testify/assert"
 )
 
 func testingKey(s string) string { return strings.ReplaceAll(s, "TESTING KEY", "PRIVATE KEY") }
 
+//nolint:gochecknoglobals
 var pemPrivateKey = testingKey(`-----BEGIN RSA TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 fd7Ai2KW5ToIwzFofvJcS/STa6HA5gQenRUCAwEAAQJBAIq9amn00aS0h/CrjXqu
@@ -20,6 +25,7 @@ tAboUGBxTDq3ZroNism3DaMIbKPyYrAqhKov1h5V
 -----END RSA TESTING KEY-----
 `)
 
+//nolint:gochecknoglobals
 var invalidTypeKey = testingKey(`-----BEGIN TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 fd7Ai2KW5ToIwzFofvJcS/STa6HA5gQenRUCAwEAAQJBAIq9amn00aS0h/CrjXqu
@@ -31,12 +37,15 @@ tAboUGBxTDq3ZroNism3DaMIbKPyYrAqhKov1h5V
 -----END TESTING KEY-----
 `)
 
+//nolint:gochecknoglobals
 var invalidBlockKey = testingKey(`-----BEGIN RSA TESTING KEY-----
 MIIBOgIBAAJBALKZD0nEffqM1ACuak0bijtqE2QrI/KLADv7l3kK3ppMyCuLKoF0
 -----END RSA TESTING KEY-----
 `)
 
 func TestOpensslPrivateEncrypt(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name       string
 		data       string
@@ -69,15 +78,27 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 		},
 	}
 
-	for _, tt := range cases {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			encryptedData, ok := ope.OpensslPrivateEncrypt(tt.data, tt.privateKey)
-			if tt.shouldFail {
-				assert.Equal(t, false, ok)
+	for _, testcase := range cases {
+		testcase := testcase
+
+		t.Run(testcase.name, func(t *testing.T) {
+			t.Parallel()
+
+			encryptedData, err := ope.OpensslPrivateEncrypt(testcase.data, testcase.privateKey)
+			if testcase.shouldFail {
+				assert.Error(t, err)
 			} else {
-				assert.Equal(t, true, ok)
+				assert.NoError(t, err)
 				assert.NotEqual(t, 0, len(encryptedData))
+
+				rsaPrivateKey, err := utils.GetRsaPrivateKey(testcase.privateKey)
+				assert.NoError(t, err)
+
+				sig, err := utils.DecodeBase64(encryptedData)
+				assert.NoError(t, err)
+
+				err = rsa.VerifyPKCS1v15(&rsaPrivateKey.PublicKey, crypto.Hash(0), []byte(testcase.data), sig)
+				assert.NoError(t, err)
 			}
 		})
 	}
