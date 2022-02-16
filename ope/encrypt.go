@@ -1,39 +1,23 @@
 package ope
 
 import (
+	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 
 	"github.com/ali-a-a/openssl-private/pkg/utils"
-	"github.com/pkg/errors"
-)
-
-const (
-	// RSAPrivateType is type that taken from the preamble.
-	RSAPrivateType = "RSA PRIVATE KEY"
 )
 
 // OpensslPrivateEncrypt encrypts data using privateKey.
 // privateKey should be in PKCS1.
 func OpensslPrivateEncrypt(data, privateKey string) (string, error) {
-	block, _ := pem.Decode([]byte(privateKey))
-	if block == nil {
-		return "", errors.New("block is nil")
-	}
-
-	if block.Type != RSAPrivateType {
-		return "", errors.New("rsa private type is invalid")
-	}
-
-	rsaPrivateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	rsaPrivateKey, err := utils.GetRsaPrivateKey(privateKey)
 	if err != nil {
-		return "", fmt.Errorf("failed to parse private key: %w", err)
+		return "", fmt.Errorf("failed to get rsa private key: %w", err)
 	}
 
-	s, err := rsa.EncryptPKCS1v15(rand.Reader, &rsaPrivateKey.PublicKey, []byte(data))
+	s, err := rsa.SignPKCS1v15(rand.Reader, rsaPrivateKey, crypto.Hash(0), []byte(data))
 	if err != nil {
 		return "", fmt.Errorf("failed to encrypt data: %w", err)
 	}

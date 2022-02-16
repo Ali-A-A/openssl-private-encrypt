@@ -1,10 +1,12 @@
 package ope_test
 
 import (
+	"crypto"
+	"crypto/rsa"
+	"github.com/ali-a-a/openssl-private/pkg/utils"
 	"strings"
 	"testing"
 
-	"github.com/ali-a-a/openssl-private/opd"
 	"github.com/ali-a-a/openssl-private/ope"
 	"github.com/stretchr/testify/assert"
 )
@@ -89,9 +91,14 @@ func TestOpensslPrivateEncrypt(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotEqual(t, 0, len(encryptedData))
 
-				data, err := opd.OpensslPrivateDecrypt(encryptedData, testcase.privateKey)
+				rsaPrivateKey, err := utils.GetRsaPrivateKey(testcase.privateKey)
 				assert.NoError(t, err)
-				assert.Equal(t, testcase.data, data)
+
+				sig, err := utils.DecodeBase64(encryptedData)
+				assert.NoError(t, err)
+
+				err = rsa.VerifyPKCS1v15(&rsaPrivateKey.PublicKey, crypto.Hash(0), []byte(testcase.data), sig)
+				assert.NoError(t, err)
 			}
 		})
 	}
