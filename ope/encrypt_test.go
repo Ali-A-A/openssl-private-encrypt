@@ -3,11 +3,11 @@ package ope_test
 import (
 	"crypto"
 	"crypto/rsa"
-	"github.com/ali-a-a/openssl-private/pkg/utils"
 	"strings"
 	"testing"
 
 	"github.com/ali-a-a/openssl-private/ope"
+	"github.com/ali-a-a/openssl-private/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
