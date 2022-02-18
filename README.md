@@ -1,6 +1,6 @@
 # openssl-private
 
-![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-85%25-brightgreen.svg?longCache=true&style=flat)
-![](https://github.com/Ali-A-A/openssl-private-encrypt/workflows/CI/badge.svg)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ali-a-a/openssl-private/ci?label=ci&logo=github&style=flat-square)
+[![Codecov](https://img.shields.io/codecov/c/gh/ali-a-a/openssl-private?logo=codecov&style=flat-square)](https://codecov.io/gh/ali-a-a/openssl-private)
 
 Sign data using pem private key.
